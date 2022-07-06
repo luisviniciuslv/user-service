@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prettier-format": "prettier --config .prettierrc.json 'src/**/*.ts' --write",
+    "prettier-format": "prettier --config .prettierrc.json ./src/**/*.ts --write",
     "start": "nodemon",
-    "test": "jest"
+    "test": "jest --verbose false"
   },
   "keywords": [],
   "author": "",
@@ -34,7 +34,7 @@
     "prettier": "^2.7.1",
     "ts-jest": "^28.0.5",
     "ts-node": "^10.8.2",
-    "typescript": "file:../../*"
+    "typescript": "^4.7.4"
   },
   "dependencies": {
     "body-parser": "^1.20.0",
