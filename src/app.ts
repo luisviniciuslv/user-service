@@ -1,5 +1,4 @@
 import bodyParser from 'body-parser';
-import exp from 'constants';
 import cors from 'cors';
 import express, { Application } from 'express';
 
@@ -9,7 +8,6 @@ export class App {
   constructor() {
     this.server = express();
     this.setConfig();
-    console.log(express())
   }
   private setConfig() {
     this.server.use(bodyParser.json({ limit: '50mb' }));
