@@ -4,12 +4,12 @@ export class UserController {
   private _router = Router();
 
   public get router() {
-    return this._router
+    return this._router;
   }
 
   constructor() {
     this._router.get('/', (_: Request, res: Response) => {
-      res.send('Hello world from my controller!!');
+      res.send('Anything here!!');
     });
   }
 }
