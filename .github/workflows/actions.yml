@@ -11,6 +11,7 @@ jobs:
       - uses: sznius/set-timezone@v1.0
         with:
           timezoneLinux: 'America/Sao_Paulo'
+          
       - uses: actions/checkout@v2
 
       - name: Set Up Node
@@ -30,6 +31,7 @@ jobs:
       - uses: sznius/set-timezone@v1.0
         with:
           timezoneLinux: 'America/Sao_Paulo'
+
       - uses: actions/checkout@v2
 
       - name: Set Up Node
