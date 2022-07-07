@@ -23,7 +23,7 @@ jobs:
 
       - name: Cancel workflow
         if: failure()
-        uses: andymackay/cancel-action@0.2
+        uses: andymckay/cancel-action@0.2
   tests:
     runs-on: ubuntu-latest
     steps:
@@ -42,4 +42,4 @@ jobs:
 
       - name: Cancel workflow
         if: failure()
-        uses: andymackay/cancel-action@0.2 
+        uses: andymckay/cancel-action@0.2
