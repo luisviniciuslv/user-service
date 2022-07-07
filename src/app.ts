@@ -9,6 +9,7 @@ export class App {
     this.server = express();
     this.setConfig();
   }
+
   private setConfig() {
     this.server.use(bodyParser.json({ limit: '50mb' }));
     this.server.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
