@@ -8,10 +8,10 @@ jobs:
   check-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: sznius/set-timezone@v1.0
+      - uses: szenius/set-timezone@v1.0
         with:
           timezoneLinux: 'America/Sao_Paulo'
-          
+
       - uses: actions/checkout@v2
 
       - name: Set Up Node
@@ -28,7 +28,7 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: sznius/set-timezone@v1.0
+      - uses: szenius/set-timezone@v1.0
         with:
           timezoneLinux: 'America/Sao_Paulo'
 
