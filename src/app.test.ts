@@ -14,8 +14,7 @@ import { App } from './app';
 jest.mock('express', () => () => expressMock);
 jest.mock('body-parser', () => bodyParserMock);
 jest.mock('cors', () => corsMock);
-jest.mock('./controller/user-controller')
-
+jest.mock('./controller/user-controller');
 
 describe('App tests', () => {
   test('should create and call setConfig method properly', () => {

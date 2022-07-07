@@ -6,8 +6,8 @@ import { UserController } from './controller/user-controller';
 export class App {
   private _server: Application;
 
-  public get server(){
-    return this._server
+  public get server() {
+    return this._server;
   }
 
   constructor() {
