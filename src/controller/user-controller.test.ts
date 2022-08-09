@@ -1,4 +1,4 @@
-const ROUTER_MOCK = { get: jest.fn() };
+const ROUTER_MOCK = { get: jest.fn(), post: jest.fn() };
 
 import { UserController } from './user-controller';
 
@@ -15,5 +15,7 @@ describe('User controller tests', () => {
     // assert
     expect(ROUTER_MOCK.get).toHaveBeenCalledTimes(1);
     expect(ROUTER_MOCK.get).toHaveBeenCalledWith('/', expect.any(Function));
+    expect(ROUTER_MOCK.post).toHaveBeenCalledTimes(1);
+    expect(ROUTER_MOCK.post).toHaveBeenCalledWith('/', expect.any(Function));
   });
 });
