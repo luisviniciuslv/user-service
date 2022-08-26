@@ -8,13 +8,20 @@ const bodyParserMock = {
   urlencoded: jest.fn(() => URL_ENCODED_MOCK)
 };
 const corsMock = jest.fn(() => CORS_RETURN_MOCK);
+const mongoDBMock = {
+  connect: jest.fn(() => ({
+    connection: { name: 'teste-connection-name' }
+  }))
+};
 
 import { App } from './app';
+import { MONGO_URI } from './constants/database';
 
 jest.mock('express', () => () => expressMock);
 jest.mock('body-parser', () => bodyParserMock);
 jest.mock('cors', () => corsMock);
 jest.mock('./controller/user-controller');
+jest.mock('mongoose', () => mongoDBMock);
 
 describe('App tests', () => {
   test('should create and call setConfig method properly', () => {
@@ -28,5 +35,6 @@ describe('App tests', () => {
     expect(expressMock.use).toHaveBeenNthCalledWith(3, CORS_RETURN_MOCK);
     expect(bodyParserMock.json).toBeCalledWith(JSON_MOCK);
     expect(bodyParserMock.urlencoded).toBeCalledWith(URL_ENCODED_MOCK);
+    expect(mongoDBMock.connect).toBeCalledWith(MONGO_URI);
   });
 });

@@ -1,6 +1,8 @@
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express, { Application } from 'express';
+import mongoose from 'mongoose';
+import { MONGO_URI } from './constants/database';
 import { UserController } from './controller/user-controller';
 
 export class App {
@@ -9,11 +11,11 @@ export class App {
   public get server() {
     return this._server;
   }
-
   constructor() {
     this._server = express();
     this.setConfig();
     this.setControllers();
+    this.setMongoConnection();
   }
 
   private setConfig() {
@@ -25,5 +27,18 @@ export class App {
   private setControllers() {
     const userController = new UserController();
     this._server.use('/api/users', userController.router);
+  }
+
+  private async setMongoConnection() {
+    mongoose.Promise = global.Promise;
+    try {
+      const server = await mongoose.connect(MONGO_URI);
+      console.log(
+        `[MongoDB Connection] server.connection.name: ${server.connection.name}`
+      );
+    } catch (error) {
+      console.error('Could not connect into MongoDB, error: ', error);
+      process.exit();
+    }
   }
 }
