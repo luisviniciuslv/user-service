@@ -1,27 +1,14 @@
+import { UserDocument } from '../documents/user';
 import { UserEmailAlreadyExistsException } from '../exceptions/user-email-already-exists-exception';
-import { User } from '../interfaces/user';
 import { UserService } from './user-service';
-class NoErrorException extends Error {}
 
-const errorwrapper = (callback: () => void): Error => {
-  try {
-    callback();
-    throw new NoErrorException();
-  } catch (error) {
-    return error;
-  }
-};
-
-const USER_ID_MOCK = 98981293;
-
-const USER_MOCK: User = {
+const USER_MOCK: UserDocument = {
   email: 'return-mock@awari.com',
   name: 'Awari Class',
-  password: '123',
-  password_confirmation: '123'
-};
+  password: '123'
+} as UserDocument;
 
-const createUserMock = jest.fn(() => USER_ID_MOCK);
+const createUserMock = jest.fn(() => USER_MOCK);
 
 jest.mock('./../repository/user-repository', () => ({
   UserRepository: jest.fn().mockImplementation(() => ({
@@ -32,41 +19,40 @@ jest.mock('./../repository/user-repository', () => ({
 }));
 
 describe('User service tests', () => {
-  test('should throw UserEmailAlreadyExistsException when user e-mail already exists', () => {
-    // arrange
-    const userService = new UserService();
-
-    // act
-    const error = errorwrapper(() => userService.createUser(USER_MOCK));
-
-    // assert
-    expect(error).toBeInstanceOf(UserEmailAlreadyExistsException);
-    expect(error.message).toBe('Invalid email: already exists');
+  test('should throw UserEmailAlreadyExistsException when user e-mail already exists', (done) => {
+    new UserService()
+      .createUser(USER_MOCK)
+      .then(() => fail())
+      .catch((error) => {
+        expect(error).toBeInstanceOf(UserEmailAlreadyExistsException);
+        expect(error.message).toBe('Invalid e-mail: already exists!');
+        done();
+      });
   });
 
-  test('should return user id when user is created sucessfully', () => {
+  test('should return user document when user is created sucessfully', async () => {
     // arrange
-    const user: User = {
+    const user = {
       ...USER_MOCK,
       email: 'awari@awari.com'
-    };
+    } as UserDocument;
     const userService = new UserService();
 
     // act
-    const userId = userService.createUser(user);
+    const userDocument = await userService.createUser(user);
 
     // assert
     expect(createUserMock).toBeCalledWith(user);
-    expect(userId).toBe(USER_ID_MOCK);
+    expect(userDocument).toStrictEqual(USER_MOCK);
   });
 
-  test('should return user when search user by e-mail', () => {
+  test('should return user when search user by e-mail', async () => {
     // arrange
 
     const userService = new UserService();
 
     // act
-    const user = userService.findByEmail(USER_MOCK.email);
+    const user = await userService.findByEmail(USER_MOCK.email);
 
     // assert
     expect(user).toStrictEqual(USER_MOCK);

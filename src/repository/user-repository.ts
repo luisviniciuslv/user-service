@@ -1,14 +1,11 @@
-import { User } from '../interfaces/user';
+import { UserDocument } from '../documents/user';
+import User from '../model/user';
 
 export class UserRepository {
-  private users: User[] = [];
-
-  public create(user: User): number {
-    this.users = [...this.users, user];
-
-    return this.users.length;
+  public create(user: UserDocument): Promise<UserDocument> {
+    const UserModel = User();
+    return new UserModel(user).save();
   }
 
-  public findByEmail = (email: string) =>
-    this.users.find((u) => u.email === email);
+  public findByEmail = (email: string) => User().findOne({ email }).exec();
 }
