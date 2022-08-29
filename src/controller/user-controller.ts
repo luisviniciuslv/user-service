@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { InvalidPayloadException } from '../exceptions/invalid-payload-exception';
 import { UserEmailAlreadyExistsException } from '../exceptions/user-email-already-exists-exception';
+import { UserNotFoundException } from '../exceptions/user-not-found-exception';
 import { UserService } from '../service/user-service';
 import { toDocument, UserRequestDTO } from './dto/user-request-dto';
 import { validateUserPayload } from './validations/user-creation';
@@ -14,12 +15,25 @@ export class UserController {
   }
 
   constructor() {
-    this._router.get('/', (_: Request, res: Response) => {
-      res.send('Anything here!!');
-    });
-
     this._router.post('/', this.create);
+    this._router.get('/:id', this.getUser);
   }
+
+  private getUser = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    try {
+      const user = await this.userService.findById(id);
+      res.status(200).send(user);
+    } catch (error) {
+      console.error(`find user by id error, id: ${id}`, error);
+
+      if (error instanceof UserNotFoundException) {
+        res.status(404).send(error.message);
+        return;
+      }
+      res.status(500).send('Internal server error');
+    }
+  };
 
   private create = async (req: Request, res: Response) => {
     const user: UserRequestDTO = {
