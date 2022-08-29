@@ -1,5 +1,6 @@
 import { UserDocument } from '../documents/user';
 import { UserEmailAlreadyExistsException } from '../exceptions/user-email-already-exists-exception';
+import { UserNotFoundException } from '../exceptions/user-not-found-exception';
 import { UserRepository } from '../repository/user-repository';
 
 export class UserService {
@@ -18,4 +19,12 @@ export class UserService {
 
   public findByEmail = (email: string) =>
     this.userRepository.findByEmail(email);
+
+  public findById = async (id: string) => {
+    const user = await this.userRepository.findById(id);
+    if (!user) {
+      throw new UserNotFoundException(`User not found: ${id}`);
+    }
+    return user;
+  };
 }

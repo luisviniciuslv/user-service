@@ -14,7 +14,7 @@ describe('User controller tests', () => {
 
     // assert
     expect(ROUTER_MOCK.get).toHaveBeenCalledTimes(1);
-    expect(ROUTER_MOCK.get).toHaveBeenCalledWith('/', expect.any(Function));
+    expect(ROUTER_MOCK.get).toHaveBeenCalledWith('/:id', expect.any(Function));
     expect(ROUTER_MOCK.post).toHaveBeenCalledTimes(1);
     expect(ROUTER_MOCK.post).toHaveBeenCalledWith('/', expect.any(Function));
   });
