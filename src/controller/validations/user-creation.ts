@@ -2,11 +2,6 @@ import * as EmailValidator from 'email-validator';
 import { InvalidPayloadException } from '../../exceptions/invalid-payload-exception';
 import { UserRequestDTO } from '../dto/user-request-dto';
 
-export interface ErrorResponse {
-  status: number;
-  message: string;
-}
-
 export const REQUIRED_FIELDS = [
   'name',
   'email',
