@@ -2,8 +2,9 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express, { Application } from 'express';
 import mongoose from 'mongoose';
-import { MONGO_URI } from './constants/database';
+import dbConsts from './constants/database';
 import { UserController } from './controller/user-controller';
+import { DatabaseUriNotFoundException } from './exceptions/database-uri-not-found-exception';
 
 export class App {
   private _server: Application;
@@ -11,6 +12,7 @@ export class App {
   public get server() {
     return this._server;
   }
+
   constructor() {
     this._server = express();
     this.setConfig();
@@ -32,7 +34,16 @@ export class App {
   private async setMongoConnection() {
     mongoose.Promise = global.Promise;
     try {
-      const server = await mongoose.connect(MONGO_URI);
+      if (!dbConsts.DATABASE_ADDRESS) {
+        throw new DatabaseUriNotFoundException(
+          'missing environment variable [MONGO_CONNECTION_URI]'
+        );
+      }
+
+      const server = await mongoose.connect(
+        `mongodb://${dbConsts.DATABASE_ADDRESS}/users`
+      );
+
       console.log(
         `[MongoDB Connection] server.connection.name: ${server.connection.name}`
       );

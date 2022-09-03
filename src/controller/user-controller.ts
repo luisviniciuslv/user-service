@@ -1,10 +1,12 @@
 import { Request, Response, Router } from 'express';
 import { InvalidPayloadException } from '../exceptions/invalid-payload-exception';
+import { InvalidSearchParamsExeption } from '../exceptions/invalid-search-params';
 import { UserEmailAlreadyExistsException } from '../exceptions/user-email-already-exists-exception';
 import { UserNotFoundException } from '../exceptions/user-not-found-exception';
 import { UserService } from '../service/user-service';
 import { toDocument, UserRequestDTO } from './dto/user-request-dto';
 import { validateUserPayload } from './validations/user-creation';
+import { validateSearchParams } from './validations/user-search';
 
 export class UserController {
   private _router = Router();
@@ -22,13 +24,21 @@ export class UserController {
   private getUser = async (req: Request, res: Response) => {
     const id = req.params.id;
     try {
+      validateSearchParams({ id });
+
       const user = await this.userService.findById(id);
+
       res.status(200).send(user);
     } catch (error) {
       console.error(`find user by id error, id: ${id}`, error);
 
       if (error instanceof UserNotFoundException) {
         res.status(404).send(error.message);
+        return;
+      }
+
+      if (error instanceof InvalidSearchParamsExeption) {
+        res.status(400).send(error.message);
         return;
       }
       res.status(500).send('Internal server error');

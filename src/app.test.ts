@@ -11,8 +11,8 @@ const corsMock = jest.fn(() => CORS_RETURN_MOCK);
 const mongoDbConnectionMock = jest.fn(() => ({
   connection: { name: 'teste-connection-name' }
 }));
+
 import { App } from './app';
-import { MONGO_URI } from './constants/database';
 
 jest.mock('express', () => () => expressMock);
 jest.mock('body-parser', () => bodyParserMock);
@@ -35,6 +35,8 @@ describe('App tests', () => {
     expect(expressMock.use).toHaveBeenNthCalledWith(3, CORS_RETURN_MOCK);
     expect(bodyParserMock.json).toBeCalledWith(JSON_MOCK);
     expect(bodyParserMock.urlencoded).toBeCalledWith(URL_ENCODED_MOCK);
-    expect(mongoDbConnectionMock).toBeCalledWith(MONGO_URI);
+    expect(mongoDbConnectionMock).toBeCalledWith(
+      `mongodb://localhost:27017/users`
+    );
   });
 });
