@@ -1,6 +1,7 @@
 import { UserDocument } from '../documents/user';
 import { UserEmailAlreadyExistsException } from '../exceptions/user-email-already-exists-exception';
 import { UserNotFoundException } from '../exceptions/user-not-found-exception';
+import { encryptStr } from '../functions/encrypt';
 import { UserRepository } from '../repository/user-repository';
 
 export class UserService {
@@ -14,7 +15,12 @@ export class UserService {
       );
     }
 
-    return this.userRepository.create(user);
+    const userHashPass = {
+      ...user,
+      password: await encryptStr(user.password)
+    } as UserDocument;
+
+    return this.userRepository.create(userHashPass);
   }
 
   public findByEmail = (email: string) =>
@@ -23,8 +29,9 @@ export class UserService {
   public findById = async (id: string) => {
     const user = await this.userRepository.findById(id);
     if (!user) {
-      throw new UserNotFoundException(`User not found: ${id}`);
+      throw new UserNotFoundException(`user not found: ${id}`);
     }
+
     return user;
   };
 }
